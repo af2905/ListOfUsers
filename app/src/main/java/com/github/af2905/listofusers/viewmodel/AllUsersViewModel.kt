@@ -3,22 +3,28 @@ package com.github.af2905.listofusers.viewmodel
 import android.app.Application
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.github.af2905.listofusers.repository.AppRepository
 import com.github.af2905.listofusers.repository.database.entity.UserEntity
-import com.github.af2905.listofusers.utils.SingleLiveEvent
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 
 class AllUsersViewModel(application: Application, private val repository: AppRepository) :
     AndroidViewModel(application) {
-
-    private val liveDataAllUsers = SingleLiveEvent<List<UserEntity>>()
+    //private val liveDataAllUsers = SingleLiveEvent<List<UserEntity>>()
+    private val liveDataAllUsers = MutableLiveData<List<UserEntity>>()
     private val disposeBag = CompositeDisposable()
 
-    fun loadAllUsersFromNetwork() {
+    init {
+        loadAllUsersFromNetwork()
+    }
+
+    private fun loadAllUsersFromNetwork() {
         disposeBag.add(
             repository.getAllUsersFromNetwork()
+                .retry()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
@@ -38,6 +44,10 @@ class AllUsersViewModel(application: Application, private val repository: AppRep
                     liveDataAllUsers.value = it
                 }, { Log.d(TAG, it.message.toString()) })
         )
+    }
+
+    fun getLiveDataAllUsers(): LiveData<List<UserEntity>> {
+        return liveDataAllUsers
     }
 
     override fun onCleared() {

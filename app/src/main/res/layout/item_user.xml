@@ -28,36 +28,38 @@
             android:paddingEnd="16dp"
             android:paddingBottom="4dp">
 
-            <LinearLayout
-                android:layout_width="match_parent"
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                app:cardCornerRadius="8dp">
 
                 <ImageView
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:contentDescription="@string/avatar"
                     app:srcCompat="@drawable/ic_placeholder"
-                    app:url="@{user.avatar}"/>
+                    app:url="@{user.avatar}" />
+            </com.google.android.material.card.MaterialCardView>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_margin="8dp"
-                    android:text="@{user.firstName}"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:textSize="18sp"
-                    tools:text="Michael" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="8dp"
+                android:text="@{user.firstName}"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="18sp"
+                tools:text="Michael" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="@{user.lastName}"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:textSize="18sp"
-                    tools:text="Lawson" />
-            </LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="4dp"
+                android:text="@{user.lastName}"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="18sp"
+                tools:text="Lawson" />
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 </layout>
