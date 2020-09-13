@@ -1,9 +1,9 @@
 package com.github.af2905.listofusers.di.module
 
+import com.github.af2905.listofusers.BuildConfig
 import com.github.af2905.listofusers.di.scope.ApiScope
 import com.github.af2905.listofusers.repository.server.ApiService
 import com.github.af2905.listofusers.repository.server.ServerCommunicator
-import com.squareup.picasso.BuildConfig
 import dagger.Module
 import dagger.Provides
 import okhttp3.ConnectionPool
