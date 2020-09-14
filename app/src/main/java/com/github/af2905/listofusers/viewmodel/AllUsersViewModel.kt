@@ -13,7 +13,6 @@ import io.reactivex.schedulers.Schedulers
 
 class AllUsersViewModel(application: Application, private val repository: AppRepository) :
     AndroidViewModel(application) {
-    //private val liveDataAllUsers = SingleLiveEvent<List<UserEntity>>()
     private val liveDataAllUsers = MutableLiveData<List<UserEntity>>()
     private val disposeBag = CompositeDisposable()
 
@@ -37,6 +36,22 @@ class AllUsersViewModel(application: Application, private val repository: AppRep
     fun loadAllUsersFromDatabase() {
         disposeBag.add(
             repository.getAllUsersFromDatabase()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    Log.d(TAG + it.size, it.toString())
+                    liveDataAllUsers.value = it
+                }, { Log.d(TAG, it.message.toString()) })
+        )
+    }
+
+    fun deleteUserFromDatabase(userEntity: UserEntity) {
+        repository.deleteSingleUserFromDatabase(userEntity)
+    }
+
+    fun updateDatabase() {
+        disposeBag.add(
+            repository.updateAllUsersInDatabase()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({

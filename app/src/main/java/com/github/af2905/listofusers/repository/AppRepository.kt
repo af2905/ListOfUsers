@@ -17,8 +17,11 @@ class AppRepository(private val communicator: ServerCommunicator, private val db
         return Single.just(db.userDao().getAll())
     }
 
-    fun updateAllUsersInDatabase(): Single<Unit> {
-        return communicator.getUsers().flatMap { Single.just(db.userDao().updateAll(it)) }
+    fun updateAllUsersInDatabase(): Single<List<UserEntity>> {
+        return communicator.getUsers().flatMap {
+            db.userDao().insertList(it)
+            getAllUsersFromDatabase()
+        }
     }
 
     fun getSingleUserFromDatabase(id: Int): Single<UserEntity> {
