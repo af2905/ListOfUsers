@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.github.af2905.listofusers.R
 import com.github.af2905.listofusers.databinding.FragmentAllUsersBinding
@@ -25,7 +26,7 @@ class AllUsersFragment : BaseFragment() {
     private val clickListener: IUserClickListener<UserEntity> =
         object : IUserClickListener<UserEntity> {
             override fun openDetail(m: UserEntity) {
-                TODO("Not yet implemented")
+                openSingleUserDetailInfo(m)
             }
         }
 
@@ -42,6 +43,7 @@ class AllUsersFragment : BaseFragment() {
         dataBinding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_all_users, container, false)
         val view = dataBinding.root
+        viewModel?.loadAllUsersFromDatabase()
         viewModel?.getLiveDataAllUsers()
             ?.observe(viewLifecycleOwner, { initRecyclerView(view, adapter, it) })
         return view
@@ -61,5 +63,11 @@ class AllUsersFragment : BaseFragment() {
         adapter.setClickListener(clickListener)
         recycler.adapter = adapter
         recycler.addItemDecoration(DivItemDecoration(16, 8))
+    }
+
+    private fun openSingleUserDetailInfo(userEntity: UserEntity) {
+        val bundle = Bundle()
+        bundle.putInt("id", userEntity.id)
+        findNavController().navigate(R.id.action_AllUsersFragment_to_SingleUserFragment, bundle)
     }
 }

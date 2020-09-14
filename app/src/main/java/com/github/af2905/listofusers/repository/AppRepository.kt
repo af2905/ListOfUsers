@@ -9,7 +9,7 @@ class AppRepository(private val communicator: ServerCommunicator, private val db
     fun getAllUsersFromNetwork(): Single<List<UserEntity>> {
         return communicator.getUsers().flatMap {
             db.userDao().insertList(it)
-            Single.just(db.userDao().getAll())
+            getAllUsersFromDatabase()
         }
     }
 
