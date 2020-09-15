@@ -17,7 +17,6 @@ import com.github.af2905.listofusers.presentation.base.BaseFragment
 import com.github.af2905.listofusers.presentation.decoration.DivItemDecoration
 import com.github.af2905.listofusers.presentation.item.IDeleteClickListener
 import com.github.af2905.listofusers.presentation.item.IUserClickListener
-import com.github.af2905.listofusers.presentation.lifecycle.Disposal
 import com.github.af2905.listofusers.repository.database.entity.UserEntity
 import com.github.af2905.listofusers.utils.AllUsersDiffUtil
 import com.github.af2905.listofusers.viewmodel.AllUsersViewModel
@@ -65,7 +64,6 @@ class AllUsersFragment : BaseFragment() {
         loadDataFromViewModel()
         swipeRefreshLayout = view.swipeAllUsersRefreshLayout
         updateDatabaseWhenSwipe()
-        disposeAfterStop()
         return view
     }
 
@@ -111,9 +109,8 @@ class AllUsersFragment : BaseFragment() {
         }
     }
 
-    private fun disposeAfterStop() {
-        val disposal = Disposal()
-        disposal.disposeOf(disposeBag)
-        lifecycle.addObserver(disposal)
+    override fun onStop() {
+        super.onStop()
+        disposeBag.dispose()
     }
 }
