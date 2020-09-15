@@ -5,7 +5,7 @@ import dagger.Module
 import dagger.Provides
 
 @Module
-class DatabaseModule(val appDatabase: AppDatabase) {
+class DatabaseModule(private val appDatabase: AppDatabase) {
     @Provides
     fun providesRoomDatabase(): AppDatabase {
         return appDatabase

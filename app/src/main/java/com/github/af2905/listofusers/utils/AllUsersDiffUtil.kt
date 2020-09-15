@@ -3,7 +3,7 @@ package com.github.af2905.listofusers.utils
 import androidx.recyclerview.widget.DiffUtil
 import com.github.af2905.listofusers.repository.database.entity.UserEntity
 
-class AllUsersDiffUtilCallback(
+class AllUsersDiffUtil(
     private val oldList: List<UserEntity>,
     private val newList: List<UserEntity>
 ) :

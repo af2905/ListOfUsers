@@ -14,7 +14,7 @@ data class UserEntity(
 
     @SerializedName("email")
     @Expose
-    val email: String? = null,
+    var email: String? = null,
 
     @SerializedName("first_name")
     @Expose

@@ -1,0 +1,35 @@
+language: android
+dist: trusty
+# setup before install
+before_install:
+  - chmod +x ./gradlew
+
+# define android packages and licenses
+android:
+  components:
+    - tools
+    - platform-tools
+    - build-tools-29.0.3
+    - android-29
+    - extra-android-m2repository
+
+  licenses:
+    - android-sdk-license-.+
+
+# only perform unit test only
+script:
+  - ./gradlew assembleDebug
+
+env:
+  global:
+    - export CODECOV_TOKEN="aa7a34b2-491d-4818-8bb9-976df1aabe0d"
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
+
+notifications:
+  email:
+    recipients:
+      -af2905g@gmail.com
+    on_success: never # default: change
+    on_failure: always # default: always

@@ -17,8 +17,9 @@ import com.github.af2905.listofusers.presentation.base.BaseFragment
 import com.github.af2905.listofusers.presentation.decoration.DivItemDecoration
 import com.github.af2905.listofusers.presentation.item.IDeleteClickListener
 import com.github.af2905.listofusers.presentation.item.IUserClickListener
+import com.github.af2905.listofusers.presentation.lifecycle.Disposal
 import com.github.af2905.listofusers.repository.database.entity.UserEntity
-import com.github.af2905.listofusers.utils.AllUsersDiffUtilCallback
+import com.github.af2905.listofusers.utils.AllUsersDiffUtil
 import com.github.af2905.listofusers.viewmodel.AllUsersViewModel
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -64,6 +65,7 @@ class AllUsersFragment : BaseFragment() {
         loadDataFromViewModel()
         swipeRefreshLayout = view.swipeAllUsersRefreshLayout
         updateDatabaseWhenSwipe()
+        disposeAfterStop()
         return view
     }
 
@@ -83,7 +85,7 @@ class AllUsersFragment : BaseFragment() {
     private fun setDataInAdapter(adapter: AllUsersAdapter, users: List<UserEntity>): Disposable {
         val listOfUsers: Observable<List<UserEntity>> = Observable.fromArray(users)
         val disposable = listOfUsers
-            .map { DiffUtil.calculateDiff(AllUsersDiffUtilCallback(adapter.getUsers(), it)) }
+            .map { DiffUtil.calculateDiff(AllUsersDiffUtil(adapter.getUsers(), it)) }
             .observeOn(AndroidSchedulers.mainThread())
             .doOnNext { adapter.setUsers(users) }
             .subscribe { it.dispatchUpdatesTo(adapter) }
@@ -107,5 +109,11 @@ class AllUsersFragment : BaseFragment() {
             viewModel?.updateDatabase()
             swipeRefreshLayout.isRefreshing = false
         }
+    }
+
+    private fun disposeAfterStop() {
+        val disposal = Disposal()
+        disposal.disposeOf(disposeBag)
+        lifecycle.addObserver(disposal)
     }
 }
